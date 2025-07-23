@@ -1,0 +1,41 @@
+<?php
+namespace CurrencyExchange;
+
+use Bitrix\Main\ORM\Data\DataManager;
+use Bitrix\Main\ORM\Fields\DatetimeField;
+use Bitrix\Main\ORM\Fields\FloatField;
+use Bitrix\Main\ORM\Fields\IntegerField;
+use Bitrix\Main\ORM\Fields\StringField;
+use Bitrix\Main\ORM\Fields\Validators\LengthValidator;
+use Bitrix\Main\Type\DateTime;
+
+class CurrencyTable extends DataManager
+{
+    public static function getTableName()
+    {
+        return 'b_currency_exchange';
+    }
+
+    public static function getMap()
+    {
+        return [
+            (new IntegerField('ID'))
+                ->configurePrimary(true)
+                ->configureAutocomplete(true),
+            
+            (new StringField('CODE'))
+                ->configureRequired(true)
+                ->configureSize(3)
+                ->configureValidator(new LengthValidator(null, 3)),
+            
+            (new DatetimeField('DATE'))
+                ->configureRequired(true)
+                ->configureDefaultValue(function() {
+                    return new DateTime();
+                }),
+            
+            (new FloatField('COURSE'))
+                ->configureRequired(true),
+        ];
+    }
+}
